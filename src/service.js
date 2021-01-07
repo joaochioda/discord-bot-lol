@@ -6,7 +6,7 @@ const getElo = '/lol/league/v4/entries/by-summoner/';
 
 const instance = axios.create({
     baseURL: 'https://br1.api.riotgames.com',
-    timeout: 1000,
+    timeout: 3000,
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
@@ -17,7 +17,7 @@ module.exports.getSummonerInformation = async (summoner) => {
     const summonerEncoded = encodeURIComponent(summoner);
     try {
         const response = await instance.get(`${getSummoner}${summonerEncoded}?api_key=${key}`);
-        return response.data.id;
+        return response.data;
     } catch(ex) {
         console.log(ex);
     }
