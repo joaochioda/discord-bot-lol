@@ -1,5 +1,6 @@
+require('dotenv').config();
 const axios = require('axios').default;
-const key = '';
+const key = process.env.LOL_API_TOKEN;
 const getSummoner = '/lol/summoner/v4/summoners/by-name/';
 const getActiveGame = '/lol/spectator/v4/active-games/by-summoner/';
 const getElo = '/lol/league/v4/entries/by-summoner/';
@@ -19,7 +20,7 @@ module.exports.getSummonerInformation = async (summoner) => {
         const response = await instance.get(`${getSummoner}${summonerEncoded}?api_key=${key}`);
         return response.data;
     } catch(ex) {
-        console.log(ex);
+        console.log('Ocorreu algum erro com a API');
     }
 }
 

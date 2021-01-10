@@ -17,8 +17,8 @@ client.on('message', async (message) => {
         if(input[0] === 'active') {
             input.shift();
             const nickname = input.join(' ');
-            const x = await getInfo(nickname);
-            message.channel.send(x);
+            const messageToDiscord = await getInfo(nickname);
+            message.channel.send(messageToDiscord);
         }
     }
 })
@@ -27,49 +27,96 @@ client.login(process.env.DISCORDJS_BOT_TOKEN);
 
 function getEmoji(elo) {
     if (elo === 'IRON') {
-        return "<:iron:796513861410488347>"
+        return "<:iron2:797949837424721941>"
+    }
+    if (elo === 'BRONZE') {
+        return "<:bronze2:797949725906698251>"
     }
     if (elo === 'SILVER') {
-        return "<:silver:796513892683612211>"
+        return "<:silver2:797949873453400116>"
     }
     if (elo === 'GOLD') {
-        return "<:gold:796513925662507029>"
+        return "<:gold2:797949813907521586>"
     }
     if (elo === 'PLATINUM') {
-        return "<:platinum:796513950098915378>"
+        return "<:platinium2:797949864616132648>"
     }
     if (elo === 'DIAMOND') {
-        return '<:diamond:796506575744401439>'
+        return '<:diamond2:797949803707105280>'
     }
     if (elo === 'MASTER') {
-        return "<:master:796513982700716095>"
+        return "<:master2:797949852486991873>"
     }
     if (elo === 'GRANDMASTER') {
-        return "<:grandmaster:796514034009899108>"
+        return "<:grandmaster2:797949826142175292>"
     }
     if (elo === 'CHALLENGER') {
-        return "<:challenger:796514004720680960>"
+        return "<:challenger2:797949792877674517>"
     }
     else {
         return '';
     }
 }
 
+function formatEloName(elo) {
+    if (elo === 'IRON') {
+        return "F"
+    }
+    if (elo === 'BRONZE') {
+        return "B"
+    }
+    if (elo === 'SILVER') {
+        return "P"
+    }
+    if (elo === 'GOLD') {
+        return "G"
+    }
+    if (elo === 'PLATINUM') {
+        return "P"
+    }
+    if (elo === 'DIAMOND') {
+        return 'D'
+    }
+    if (elo === 'MASTER') {
+        return "M"
+    }
+    if (elo === 'GRANDMASTER') {
+        return "GM"
+    }
+    if (elo === 'CHALLENGER') {
+        return "CH"
+    }
+}
+
+function formatNumberRank(rank) {
+    if (rank === 'I') {
+        return '1';
+    }
+    if (rank === 'II') {
+        return '2';
+    }
+    if (rank === 'III') {
+        return '3';
+    }
+    if (rank === 'IV') {
+        return '4';
+    }
+}
+
+
 function getAllParticipantsElo(listPlayers) {
 
     var promises = listPlayers.map(lp => getEloInformartion(lp.id));
-
     var promisesResolved = Promise.all(promises);
 
-    return promisesResolved.then(c=> {
-        const results = c.map((result, idx) => {
+    return promisesResolved.then(promises=> {
+        const results = promises.map((result, idx) => {
             const rankedSolo = result.find(elo => elo.queueType === 'RANKED_SOLO_5x5');
             if(rankedSolo) {
-                return ({message:`${rankedSolo.summonerName} ${rankedSolo.tier} ${rankedSolo.rank} ${getEmoji(rankedSolo.tier)}`, team:listPlayers[idx].team})
+                return ({message:`${rankedSolo.summonerName} - ${formatEloName(rankedSolo.tier)}${formatNumberRank(rankedSolo.rank)} ${getEmoji(rankedSolo.tier)}`, team:listPlayers[idx].team})
             }
-            return ({message:`${listPlayers[idx].name} Unranked`, team:listPlayers[idx].team});
+            return ({message:`${listPlayers[idx].name} :black_circle:`, team:listPlayers[idx].team});
         })
-
         return results;
     })          
 }
@@ -87,7 +134,6 @@ function formatMessage(message) {
     for (let i=0; i<timeB.length;i++) {
         timeBtext = timeBtext + `${timeB[i].message} \n`
     }
-
     return timeAtext + timeBtext
 }
 
@@ -110,7 +156,3 @@ async function getInfo(name) {
     }
     })
 }
-
-
-//https://discord.com/oauth2/authorize?client_id=795778684271329311&scope=bot
-//
