@@ -1,12 +1,12 @@
 const axios = require('axios').default;
-const key = 'RGAPI-9356bbe1-bb90-436f-b77f-b582ae74be66';
+const key = '';
 const getSummoner = '/lol/summoner/v4/summoners/by-name/';
 const getActiveGame = '/lol/spectator/v4/active-games/by-summoner/';
 const getElo = '/lol/league/v4/entries/by-summoner/';
 
 const instance = axios.create({
     baseURL: 'https://br1.api.riotgames.com',
-    timeout: 3000,
+    timeout: 50000,
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }

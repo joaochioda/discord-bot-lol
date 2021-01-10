@@ -55,19 +55,58 @@ function getEmoji(elo) {
     }
 }
 
-function getInfo(name) {
-   return getSummonerInformation(name).then(data => {
-       if(data.id) {
-        var promises = Promise.all([getActiveGameInformartion(data.id), getEloInformartion(data.id)]);
-        return promises.then(c=> {
-            const rankedSolo = c[1].find(elo => elo.queueType === 'RANKED_SOLO_5x5');
+function getAllParticipantsElo(listPlayers) {
+
+    var promises = listPlayers.map(lp => getEloInformartion(lp.id));
+
+    var promisesResolved = Promise.all(promises);
+
+    return promisesResolved.then(c=> {
+        const results = c.map((result, idx) => {
+            const rankedSolo = result.find(elo => elo.queueType === 'RANKED_SOLO_5x5');
             if(rankedSolo) {
-                return (`${data.name} ${rankedSolo.tier} ${rankedSolo.rank} ${getEmoji(rankedSolo.tier)} `)
+                return ({message:`${rankedSolo.summonerName} ${rankedSolo.tier} ${rankedSolo.rank} ${getEmoji(rankedSolo.tier)}`, team:listPlayers[idx].team})
             }
-            return 'Unranked';
+            return ({message:`${listPlayers[idx].name} Unranked`, team:listPlayers[idx].team});
+        })
+
+        return results;
+    })          
+}
+
+function formatMessage(message) {
+    const timeA = message.filter(m=> m.team === 100);
+    const timeB = message.filter(m=> m.team === 200);
+
+    let timeAtext = '`Time A` \n';
+    for (let i=0; i<timeA.length;i++) {
+        timeAtext = timeAtext + `${timeA[i].message} \n`
+    }
+
+    let timeBtext = '`Time B` \n';
+    for (let i=0; i<timeB.length;i++) {
+        timeBtext = timeBtext + `${timeB[i].message} \n`
+    }
+
+    return timeAtext + timeBtext
+}
+
+async function getInfo(name) {
+   return getSummonerInformation(name).then(data => {
+       if(data && data.id) {
+        var promises = Promise.all([getActiveGameInformartion(data.id)]);
+        return promises.then(async c=> {
+            if (c[0]) {
+                const summonersInfo = c[0].participants.map(player => ({id: player.summonerId, name: player.summonerName, team: player.teamId}));
+                const result = await getAllParticipantsElo(summonersInfo);
+                
+                return formatMessage(result);
+            } else {
+                return 'Usuário não esta jogando.'
+            }
         })
     } else {
-        return 'Usuário não encontrado'
+        return 'Usuário não encontrado.'
     }
     })
 }
