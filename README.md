@@ -19,7 +19,6 @@
 
 <p align="center">
   <a href="#rocket-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#information_source-how-to-use">How to Use</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#thumbsup-how-to-contribute">How to Contribute</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#art-layout">Layout</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 </p>
@@ -33,25 +32,6 @@ This project was developed with the following technologies:
 - [Discord.JS](https://discord.js.org/)
 - [VS Code][vc]
 
-## :information_source: How to Use
-
-To clone and run this application, you'll need [Git](https://git-scm.com), [Node.js][nodejs] + [Yarn][yarn] installed on your computer.
-
-From your command line:
-
-```bash
-# Clone this repository
-$ git clone discord-bot-lol
-
-# Install dependencies
-$ npm install
-
-# Run the server
-$ npm run dev
-
-# The web application will open on port:3000
-# To access it go to http://localhost:3000
-```
 
 ## :thumbsup: How to Contribute
 
